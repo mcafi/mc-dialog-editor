@@ -2,16 +2,25 @@ import { defineStore } from "pinia";
 import { readFile } from "@tauri-apps/plugin-fs";
 
 import { useDirectoryStore } from "./directoryStore";
-import { DialogStruct } from "../types/Dialog";
+import { DialogData, DialogStruct, Langugage } from "../types/Dialog";
 
 export const useDialogStore = defineStore("dialog", {
   state: () => ({
     fileName: "" as string | null,
     dialog: {} as DialogStruct,
+    lang: "en" as Langugage,
   }),
   getters: {
     dialogKeys(state) {
       return Object.keys(state.dialog);
+    },
+    rootUUID(state) {
+      return state.dialog.root?.next;
+    },
+    rootDialog(state) {
+      if (!state.dialog.root) return null;
+      const rootUUID = state.dialog.root.next;
+      return state.dialog[rootUUID] as DialogData;
     },
   },
   actions: {
