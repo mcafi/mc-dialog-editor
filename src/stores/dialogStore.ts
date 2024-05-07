@@ -14,6 +14,9 @@ export const useDialogStore = defineStore("dialog", {
     dialogKeys(state) {
       return Object.keys(state.dialog);
     },
+    isEmpty(state) {
+      return !state.dialog.root?.next;
+    },
     rootUUID(state) {
       return state.dialog.root?.next;
     },
@@ -21,6 +24,11 @@ export const useDialogStore = defineStore("dialog", {
       if (!state.dialog.root) return null;
       const rootUUID = state.dialog.root.next;
       return state.dialog[rootUUID] as DialogData;
+    },
+    allTextDialogs(state) {
+      return state.dialog.__editor?.dialogues.map(
+        (dialogMetadata) => state.dialog[dialogMetadata.uuid] as DialogData
+      );
     },
   },
   actions: {
