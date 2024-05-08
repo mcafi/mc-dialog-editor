@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { readFile } from "@tauri-apps/plugin-fs";
 
 import { useDirectoryStore } from "./directoryStore";
-import { DialogData, DialogStruct, Langugage } from "../types/Dialog";
+import { Dialog, DialogData, DialogStruct, Langugage } from "../types/Dialog";
 
 export const useDialogStore = defineStore("dialog", {
   state: () => ({
@@ -25,10 +25,33 @@ export const useDialogStore = defineStore("dialog", {
       const rootUUID = state.dialog.root.next;
       return state.dialog[rootUUID] as DialogData;
     },
-    allTextDialogs(state) {
-      return state.dialog.__editor?.dialogues.map(
-        (dialogMetadata) => state.dialog[dialogMetadata.uuid] as DialogData
-      );
+    allTextDialogs(state): Dialog[] {
+      return state.dialog.__editor?.dialogues.map((dialogMetadata) => {
+        return {
+          ...(state.dialog[dialogMetadata.uuid] as DialogData),
+          ...dialogMetadata,
+        };
+      });
+    },
+    allSignals(state) {
+      return state.dialog.__editor?.signals.map((signalMetadata) => {
+        const signalParent = state.dialog[signalMetadata.parent] as DialogData;
+
+        return {
+          ...signalMetadata,
+          ...signalParent.signals,
+        };
+      });
+    },
+    allChoices(state) {
+      return state.dialog.__editor?.choices.map((choiceMetadata) => {
+        const choiceParent = state.dialog[choiceMetadata.parent] as DialogData;
+
+        return {
+          ...choiceMetadata,
+          ...choiceParent.choices,
+        };
+      });
     },
   },
   actions: {

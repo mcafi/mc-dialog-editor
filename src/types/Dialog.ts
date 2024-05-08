@@ -78,3 +78,8 @@ export type ChoiceData = {
   uuid?: string;
   text: Record<Langugage, string>;
 };
+
+export type Dialog = DialogData & DialogMetadata;
+export type Signal = SignalData & SignalMetadata;
+export type Choice = ChoiceData & ChoiceMetadata;
+export type Condition = ConditionData & ConditionMetadata;
