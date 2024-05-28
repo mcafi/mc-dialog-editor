@@ -3,10 +3,11 @@
     <h2 class="text-xl">File: {{ dialogStore.fileName }}</h2>
     <button @click="test">TEST</button>
     <div v-if="dialogStore.isEmpty" class="text-white">No dialog found</div>
-    <div v-else>
+    <div class="relative" v-else>
       <SignalBox v-for="signal in dialogStore.allSignals" :uuid="signal.uuid" :text="signal.data" />
       <ChoiceBox v-for="choice in dialogStore.allChoices" :uuid="choice.uuid" :text="choice" />
-      <TextBox v-for="dialog in dialogStore.allTextDialogs" :uuid="dialog.uuid" :text="dialog.text.it" />
+      <TextBox v-for="dialog in dialogStore.allTextDialogs" :uuid="dialog.uuid" :text="dialog.text.it"
+        :offset="dialog.offset" />
     </div>
   </div>
 </template>
